@@ -1,6 +1,6 @@
 # gulp-automation
 
-利用 Gulp 配置的前端项目自动化工作流
+利用 Gulp 配置的前端项目自动化工作流，实现 css js html 代码和图片一键压缩、发布、打包、上线。
 
 ---
 
