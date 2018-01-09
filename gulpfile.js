@@ -4,6 +4,7 @@ var runSequence = require('run-sequence');
 var mergeStream = require('merge-stream');
 var browserSync = require('browser-sync').create();
 var $ = require('gulp-load-plugins')();
+var pkg = require('./package.json');
 
 var G = {
     path: '.',
@@ -151,7 +152,7 @@ gulp.task('copyOtherFile', function(){
 
 gulp.task('zip', function(){
     return gulp.src('./build/**/*')
-        .pipe($.zip('build.' + getNowFormatDate() + '.zip'))
+        .pipe($.zip(pkg.name + '.' + getNowFormatDate() + '.zip'))
         .pipe(gulp.dest('./build-zip'));
 });
 
