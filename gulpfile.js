@@ -60,7 +60,7 @@ gulp.task('default', ['server'], function(){
 
 // 打包
 gulp.task('build', function(){
-    runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'copyOtherFile');
+    runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
 });
 
 gulp.task('del', function(){
@@ -92,7 +92,7 @@ gulp.task('revCss', function(){
         .pipe(gulp.dest('./build'));
     var b = gulp.src(['./build/static/rev-css/*.json', './module/**/*.html'])
         .pipe($.revCollector())
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build/module'));
     return mergeStream(a, b);
 });
 
@@ -111,7 +111,7 @@ gulp.task('revJs', function(){
         .pipe(gulp.dest('./build'));
     var b = gulp.src(['./build/static/rev-js/*.json', './build/module/**/*.html'])
         .pipe($.revCollector())
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build/module'));
     return mergeStream(a, b);
 });
 
@@ -119,7 +119,50 @@ gulp.task('delRev', function(){
     return del.sync(['./build/static/rev-css', './build/static/rev-js']);
 });
 
-gulp.task('copyOtherFile', function(){
-    return gulp.src('./static/plugins/**/*')
-        .pipe(gulp.dest('./build/static/plugins'));
+// 压缩 html 文件
+gulp.task('htmlmin', function(){
+    var option = {
+        removeComments: true,//清除HTML注释
+        collapseWhitespace: true,//压缩HTML
+        collapseBooleanAttributes: true,//省略布尔属性的值 <input checked="true"/> ==> <input />
+        removeEmptyAttributes: true,//删除所有空格作属性值 <input id="" /> ==> <input />
+        removeScriptTypeAttributes: true,//删除<script>的type="text/javascript"
+        removeStyleLinkTypeAttributes: true,//删除<style>和<link>的type="text/css"
+        minifyJS: true,//压缩页面JS
+        minifyCSS: true//压缩页面CSS
+    };
+    var a = gulp.src('./build/*.html')
+        .pipe($.htmlmin(option))
+        .pipe(gulp.dest('./build'));
+    var b = gulp.src('./build/module/**/*.html')
+        .pipe($.htmlmin(option))
+        .pipe(gulp.dest('./build/module'));
+    return mergeStream(a, b);
 });
+
+// 拷贝其它文件到 build 里
+gulp.task('copyOtherFile', function(){
+    var plugins = gulp.src('./static/plugins/**/*')
+        .pipe(gulp.dest('./build/static/plugins'));
+    var template = gulp.src('./static/template/*')
+        .pipe(gulp.dest('./build/static/template'));
+    return mergeStream(plugins, template);
+});
+
+gulp.task('zip', function(){
+    return gulp.src('./build/**/*')
+        .pipe($.zip('build.' + getNowFormatDate() + '.zip'))
+        .pipe(gulp.dest('./build-zip'));
+});
+
+// 获取当前时间
+function getNowFormatDate(){
+    var date = new Date();
+    var month = date.getMonth() + 1;
+    month = month < 10 ? '0' + month : month;
+    var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+    var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+    var minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+    var second = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+    return date.getFullYear() + month + strDate + '.' + hour + minute + second;
+}
