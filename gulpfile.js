@@ -58,7 +58,7 @@ gulp.task('default', ['server'], function(){
     gulp.watch([G.html, G.js]).on('change', browserSync.reload);
 });
 
-// 打包
+// 发布&打包
 gulp.task('build', function(){
     runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
 });
