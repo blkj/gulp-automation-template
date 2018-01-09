@@ -34,6 +34,8 @@ $ gulp build
 $ gulp build --z
 ```
 
+> 修改 package.json 里的 name 参数，可改变打包出来 zip 文件的命名
+
 ## 说明
 
 ### 目录结构
