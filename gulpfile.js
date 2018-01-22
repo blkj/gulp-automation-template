@@ -4,6 +4,7 @@ var runSequence = require('run-sequence');
 var mergeStream = require('merge-stream');
 var browserSync = require('browser-sync').create();
 var $ = require('gulp-load-plugins')();
+var args = require('yargs').argv;
 var pkg = require('./package.json');
 
 var G = {
@@ -61,7 +62,11 @@ gulp.task('default', ['server'], function(){
 
 // 发布&打包
 gulp.task('build', function(){
-    runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
+    if(args.z){
+        runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
+    }else{
+        runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
+    }
 });
 
 gulp.task('del', function(){
