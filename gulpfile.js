@@ -63,9 +63,9 @@ gulp.task('default', ['server'], function(){
 // 发布&打包
 gulp.task('build', function(){
     if(args.z){
-        runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
+        runSequence('del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
     }else{
-        runSequence('del', 'compass', 'page', 'imagemin', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
+        runSequence('del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
     }
 });
 
@@ -73,13 +73,9 @@ gulp.task('del', function(){
     return del.sync(['build/**']);
 });
 
-gulp.task('imagemin', function(){
-    gulp.src('./static/image/*.{png,jpg,gif,ico}')
-        .pipe($.imagemin({
-            progressive: true, //类型：Boolean 默认：false 无损压缩jpg图片
-            interlaced: true, //类型：Boolean 默认：false 隔行扫描gif进行渲染
-            multipass: true //类型：Boolean 默认：false 多次优化svg直到完全优化
-        }))
+gulp.task('tinypngNokey', function(){
+    return gulp.src('./static/image/*.{png,jpg,gif,ico}')
+        .pipe($.tinypngNokey())
         .pipe(gulp.dest('./build/static/image'));
 });
 

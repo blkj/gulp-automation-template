@@ -34,7 +34,8 @@ $ gulp build
 $ gulp build --z
 ```
 
-> 修改 package.json 里的 name 参数，可改变打包出来 zip 文件的命名
+> - 修改 package.json 里的 name 参数，可改变打包出来 zip 文件的命名
+> - 打包时使用了 gulp-tinypng-nokey 包进行图片压缩，需要将图片上传到服务器压缩后再下载，请确保打包时网络畅通
 
 ## 说明
 
@@ -66,7 +67,7 @@ gulp-automation
 - [gulp-compass](https://www.npmjs.com/package/gulp-compass)
 - [gulp-file-include](https://www.npmjs.com/package/gulp-file-include)
 - [gulp-htmlmin](https://www.npmjs.com/package/gulp-htmlmin)
-- [gulp-imagemin](https://www.npmjs.com/package/gulp-imagemin)
+- [gulp-tinypng-nokey](https://www.npmjs.com/package/gulp-tinypng-nokey)
 - [gulp-load-plugins](https://www.npmjs.com/package/gulp-load-plugins)
 - [gulp-plumber](https://www.npmjs.com/package/gulp-plumber)
 - [gulp-rev](https://www.npmjs.com/package/gulp-rev)
