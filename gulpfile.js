@@ -56,7 +56,7 @@ gulp.task('page', function(){
 gulp.task('default', ['server'], function(){
 	gulp.watch(G.sass, ['compass']);
 	gulp.watch(G.css, ['css']);
-    gulp.watch(G.page, ['page']);
+    gulp.watch(G.page[0], ['page']);
     gulp.watch([G.html, G.js]).on('change', browserSync.reload);
 });
 
