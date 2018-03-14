@@ -51,7 +51,7 @@ gulp-automation
 　│　├ css             css 文件，通过 sass 自动生成
 　│　├ image           图片文件
 　│　├ js              js 文件
-　│　├ plugins         plugins 文件，存放 js 或 css 的插件和框架
+　│　├ plugin         plugin 文件，存放 js 或 css 的插件和框架
 　│　├ sass            sass 源文件
 　│　└ template        template 文件，存放 js 模版文件
 　├ config.rb          compass 配置文件
@@ -61,19 +61,19 @@ gulp-automation
 
 ### 功能模块
 
-- [browser-sync](https://browsersync.io/) ([中文网](http://www.browsersync.cn/))
-- [del](https://www.npmjs.com/package/del)
+- [browser-sync](https://browsersync.io/) ([中文网](http://www.browsersync.cn/)) 浏览器同步测试工具
+- [del](https://www.npmjs.com/package/del) 用于删除文件
 - [gulp-clean-css](https://www.npmjs.com/package/gulp-clean-css)
-- [gulp-compass](https://www.npmjs.com/package/gulp-compass)
-- [gulp-file-include](https://www.npmjs.com/package/gulp-file-include)
+- [gulp-compass](https://www.npmjs.com/package/gulp-compass) 用于处理sass文件的工具
+- [gulp-file-include](https://www.npmjs.com/package/gulp-file-include) 用于引用公共模板
 - [gulp-htmlmin](https://www.npmjs.com/package/gulp-htmlmin)
 - [gulp-tinypng-nokey](https://www.npmjs.com/package/gulp-tinypng-nokey)
-- [gulp-load-plugins](https://www.npmjs.com/package/gulp-load-plugins)
-- [gulp-plumber](https://www.npmjs.com/package/gulp-plumber)
+- [gulp-load-plugins](https://www.npmjs.com/package/gulp-load-plugins) 自动require在package.json中声明的依赖
+- [gulp-plumber](https://www.npmjs.com/package/gulp-plumber) 用于流的顺利进行
 - [gulp-rev](https://www.npmjs.com/package/gulp-rev)
 - [gulp-rev-collector](https://www.npmjs.com/package/gulp-rev-collector)
 - [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
 - [gulp-zip](https://www.npmjs.com/package/gulp-zip)
-- [merge-stream](https://www.npmjs.com/package/merge-stream)
-- [run-sequence](https://www.npmjs.com/package/run-sequence)
-- [yargs](https://www.npmjs.com/package/yargs)
+- [merge-stream](https://www.npmjs.com/package/merge-stream) 将多个stream合成一个返回
+- [run-sequence](https://www.npmjs.com/package/run-sequence) 用于将任务按照一定的顺序执行
+- [yargs](https://www.npmjs.com/package/yargs) Node中处理命令行参数的通用解决方案
