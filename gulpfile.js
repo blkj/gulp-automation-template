@@ -144,8 +144,8 @@ gulp.task('htmlmin', function(){
 
 // 拷贝其它文件到 build 里
 gulp.task('copyOtherFile', function(){
-    var plugins = gulp.src('./static/plugins/**/*')
-        .pipe(gulp.dest('./build/static/plugins'));
+    var plugins = gulp.src('./static/plugin/**/*')
+        .pipe(gulp.dest('./build/static/plugin'));
     var template = gulp.src('./static/template/*')
         .pipe(gulp.dest('./build/static/template'));
     return mergeStream(plugins, template);
