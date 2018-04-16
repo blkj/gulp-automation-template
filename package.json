@@ -22,6 +22,7 @@
     "gulp-rev-collector": "^1.2.4",
     "gulp-tinypng-nokey": "^1.1.0",
     "gulp-uglify": "^3.0.0",
+    "gulp-watch": "^5.0.0",
     "gulp-zip": "^4.1.0",
     "merge-stream": "^1.0.1",
     "run-sequence": "^2.2.1",

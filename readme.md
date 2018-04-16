@@ -73,6 +73,7 @@ gulp-automation
 - [gulp-rev](https://www.npmjs.com/package/gulp-rev)
 - [gulp-rev-collector](https://www.npmjs.com/package/gulp-rev-collector)
 - [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
+- [gulp-watch](https://www.npmjs.com/package/gulp-watch)
 - [gulp-zip](https://www.npmjs.com/package/gulp-zip)
 - [merge-stream](https://www.npmjs.com/package/merge-stream) 将多个stream合成一个返回
 - [run-sequence](https://www.npmjs.com/package/run-sequence) 用于将任务按照一定的顺序执行

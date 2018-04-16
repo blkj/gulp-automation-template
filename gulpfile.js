@@ -54,10 +54,19 @@ gulp.task('page', function(){
 });
 
 gulp.task('default', ['server'], function(){
-	gulp.watch(G.sass, ['compass']);
-	gulp.watch(G.css, ['css']);
-    gulp.watch(G.page[0], ['page']);
-    gulp.watch([G.html, G.js]).on('change', browserSync.reload);
+    $.watch(G.sass, function(e, type){
+        gulp.watch(G.sass, ['compass']);
+    });
+    $.watch(G.css, function(){
+        gulp.watch(G.css, ['css']);
+    });
+    $.watch(G.js, function(){
+        browserSync.reload();
+    });
+    $.watch(G.page[0], function(){
+        gulp.watch(G.page[0], ['page']);
+    });
+    gulp.watch(G.html).on('change', browserSync.reload);
 });
 
 // 发布&打包
