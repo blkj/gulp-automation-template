@@ -53,7 +53,10 @@ gulp.task('page', function(){
         .pipe(gulp.dest(G.path));
 });
 
-gulp.task('default', ['server'], function(){
+gulp.task('default', function(){
+    // 启动时先进行一次编译
+    runSequence('compass', 'css', 'page', 'server');
+    // 针对不同文件的监听
     $.watch(G.sass, function(e, type){
         gulp.watch(G.sass, ['compass']);
     });
