@@ -9,6 +9,9 @@
 # 编译的 css 文件
 /static/css/
 
+# 编译的 js 文件
+/static/js/
+
 # 编译的 html 文件
 /*.html
 /module/

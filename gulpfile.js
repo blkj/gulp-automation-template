@@ -19,8 +19,14 @@ var G = {
     ],
     sass: './static/sass/*.scss',
     css: './static/**/*.css',
-    js: './static/**/*.js'
+    sourcejs: './static/sourcejs/*.js',
+    js: [
+        './static/**/*.js',
+        '!./static/sourcejs/*.js'
+    ]
 };
+
+var config = {};
 
 gulp.task('server', function(){
     browserSync.init({
@@ -45,23 +51,46 @@ gulp.task('css', function(){
         .pipe(browserSync.stream());
 });
 
+gulp.task('js', function(event){
+    return gulp.src(G.sourcejs)
+        .pipe($.plumber())
+        .pipe($.preprocess({
+            context: config
+        }))
+        .pipe(gulp.dest('./static/js/'));
+});
+
 // 适配 page 中所有文件夹下的所有 html ，排除 page 下的 include 文件夹中 html
 gulp.task('page', function(){
     return gulp.src(G.page)
         .pipe($.plumber())
+        .pipe($.preprocess({
+            context: config
+        }))
         .pipe($.fileInclude())
         .pipe(gulp.dest(G.path));
 });
 
+gulp.task('config', function(){
+    if(args.b){
+        config.isLocal = false;
+    }else{
+        config.isLocal = true;
+    }
+});
+
 gulp.task('default', function(){
     // 启动时先进行一次编译
-    runSequence('compass', 'css', 'page', 'server');
+    runSequence('config', 'compass', 'css', 'page', 'server');
     // 针对不同文件的监听
     $.watch(G.sass, function(e, type){
         gulp.watch(G.sass, ['compass']);
     });
     $.watch(G.css, function(){
         gulp.watch(G.css, ['css']);
+    });
+    $.watch(G.sourcejs, function(){
+        gulp.watch(G.sourcejs, ['js']);
     });
     $.watch(G.js, function(){
         browserSync.reload();
@@ -75,9 +104,9 @@ gulp.task('default', function(){
 // 发布&打包
 gulp.task('build', function(){
     if(args.z){
-        runSequence('del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
+        runSequence('config', 'del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
     }else{
-        runSequence('del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
+        runSequence('config', 'del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
     }
 });
 
