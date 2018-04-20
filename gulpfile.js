@@ -81,7 +81,7 @@ gulp.task('config', function(){
 
 gulp.task('default', function(){
     // 启动时先进行一次编译
-    runSequence('config', 'compass', 'css', 'page', 'server');
+    runSequence('config', 'compass', 'css', 'js', 'page', 'server');
     // 针对不同文件的监听
     $.watch(G.sass, function(e, type){
         gulp.watch(G.sass, ['compass']);
@@ -104,9 +104,9 @@ gulp.task('default', function(){
 // 发布&打包
 gulp.task('build', function(){
     if(args.z){
-        runSequence('config', 'del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
+        runSequence('config', 'del', 'compass', 'js', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile', 'zip');
     }else{
-        runSequence('config', 'del', 'compass', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
+        runSequence('config', 'del', 'compass', 'js', 'page', 'tinypngNokey', 'compressCss', 'revCss', 'compressJs', 'revJs', 'delRev', 'htmlmin', 'copyOtherFile');
     }
 });
 
