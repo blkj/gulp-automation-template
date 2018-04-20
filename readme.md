@@ -50,9 +50,10 @@ gulp-automation
 　├ static             资源文件
 　│　├ css             css 文件，通过 sass 自动生成
 　│　├ image           图片文件
-　│　├ js              js 文件
-　│　├ plugin         plugin 文件，存放 js 或 css 的插件和框架
+　│　├ js              js 文件，通过 sourcejs 自动生成
+　│　├ plugin          plugin 文件，存放 js 或 css 的插件和框架
 　│　├ sass            sass 源文件
+　│　├ sourcejs        js 源文件
 　│　└ template        template 文件，存放 js 模版文件
 　├ config.rb          compass 配置文件
 　├ gulpfile.js        gulp 配置文件
@@ -70,6 +71,7 @@ gulp-automation
 - [gulp-tinypng-nokey](https://www.npmjs.com/package/gulp-tinypng-nokey)
 - [gulp-load-plugins](https://www.npmjs.com/package/gulp-load-plugins) 自动require在package.json中声明的依赖
 - [gulp-plumber](https://www.npmjs.com/package/gulp-plumber) 用于流的顺利进行
+- [gulp-preprocess](https://www.npmjs.com/package/gulp-preprocess)
 - [gulp-rev](https://www.npmjs.com/package/gulp-rev)
 - [gulp-rev-collector](https://www.npmjs.com/package/gulp-rev-collector)
 - [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
