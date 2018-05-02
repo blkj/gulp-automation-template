@@ -1,0 +1,20 @@
+.DS_Store
+/node_modules/
+/.vscode/
+
+# 打包的代码
+/build/
+/build-zip/
+
+# 编译的精灵图
+/static/image/sprite/*.*
+
+# 编译的 css 文件
+/static/css/
+
+# 编译的 js 文件
+/static/js/
+
+# 编译的 html 文件
+/*.html
+/module/

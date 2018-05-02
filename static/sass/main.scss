@@ -1,0 +1,15 @@
+@import "compass";
+
+$test-img-layout: smart;
+@import "sprite/test-img/*.png";
+
+$bgc: #fff;
+
+body{
+	background-color: $bgc;
+	.test-img{
+		@include test-img-sprite(chrome);
+	    width: test-img-sprite-width(chrome);
+	    height: test-img-sprite-height(chrome);
+	}
+}
