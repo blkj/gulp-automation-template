@@ -15,7 +15,7 @@ cache = false
 sourcemap = true
 
 # 输出格式，可选择 :expanded or :nested or :compact or :compressed
-output_style = :compressed
+output_style = :expanded
 
 # 开启行号
 line_comments = false
