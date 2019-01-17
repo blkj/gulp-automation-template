@@ -1,0 +1,8 @@
+build/
+node_modules/
+
+./*.html
+module/
+static/js/
+
+gulpfile.js

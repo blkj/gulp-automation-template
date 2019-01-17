@@ -4,51 +4,58 @@
 
 ---
 
-## 用法
+## 使用
 
-### 安装
+> 本项目基于 Gulp 4.x 运行，如果你以前全局安装过 gulp ，需要先运行 `npm rm --global gulp` 删除旧版本 gulp ，再运行 `npm install --global gulp-cli` 安装最新版本。
+
+下载到本地后运行：
 
 ```
 $ npm install
-```
-
-### 运行
-
-```
 $ gulp
 ```
 
 访问 `http://localhost:3000` 即可看到页面。
 
-### 发布
+## 参数
+
+### gulp
+
+运行指令
 
 ```
-$ gulp build
+$ gulp [options]
 ```
 
-每次发布前会先删除 build 目录后再新建，有时候会报错，建议重复执行该命令。
+- `--local` ，用于切换本地/生成环境，默认为 `true` ，需要在代码里配置，具体可参考 `page/index.html`
+- `--l` ，同 `--local`
+
+示例：
+
+```
+gulp --l false
+```
+
+### gulp build
+
+发布指令
 
 > 发布时使用了 gulp-tinypng-nokey 包进行图片压缩，需要将图片上传到服务器压缩后再下载，请确保打包时网络畅通
 
-### 参数
+```
+$ gulp build [options]
+```
 
-#### `--b` 切换至正式环境
+- `--local` ，切换至本地环境
+- `--l` ，同 `--local`
+- `--noimg` ，不处理图片
+- `--zip` ，创建压缩包，压缩包文件名为 package.json 里的 name 参数
 
 示例：
 
 ```
-$ gulp --b
+gulp build --noimg --zip
 ```
-
-#### `--z` 打包
-
-示例：
-
-```
-$ gulp build --z
-```
-
-> 修改 package.json 里的 name 参数，可改变打包出来 zip 文件的命名
 
 ## 说明
 
@@ -56,22 +63,22 @@ $ gulp build --z
 
 ```
 gulp-automation
-　├ build              发布目录，发布时会将 css js html 文件进行压缩，并存放于此
-　├ build-zip          打包目录，每次发布都会生成一个 zip 压缩包存放于此
-　├ page               静态页面
-　│　└ include         公用页面
-　├ static             资源文件
-　│　├ css             css 文件，通过 sass 自动生成
-　│　├ image           图片文件
-　│　│　└ sprite       精灵图存放目录
-　│　├ js              js 文件，通过 sourcejs 自动生成
-　│　├ plugin          plugin 文件，存放 js 或 css 的插件和框架
-　│　├ sass            sass 源文件
-　│　├ sourcejs        js 源文件
-　│　└ template        template 文件，存放 js 模版文件
-　├ config.rb          compass 配置文件
-　├ gulpfile.js        gulp 配置文件
-　└ package.json       npm 配置文件
+  ├─ build                发布目录，发布时会将 css js html 文件进行压缩，并存放于此
+  ├─ build-zip            打包目录，每次发布都会生成一个 zip 压缩包存放于此
+  ├─ page                 静态页面
+  │  └─ include           公用页面
+  ├─ static               资源文件
+  │  ├─ css               css 文件，通过 sass 自动生成
+  │  ├─ image             图片文件
+  │  │  └─ sprite         精灵图存放目录
+  │  ├─ js                js 文件，通过 sourcejs 自动生成
+  │  ├─ plugin            plugin 文件，存放 js 或 css 的插件和框架
+  │  ├─ sass              sass 源文件
+  │  ├─ sourcejs          js 源文件
+  │  └─ template          template 文件，存放 js 模版文件
+  ├─ config.rb            compass 配置文件
+  ├─ gulpfile.js          gulp 配置文件
+  └─ package.json         npm 配置文件
 ```
 
 ### 功能模块
@@ -89,8 +96,13 @@ gulp-automation
 - [gulp-rev](https://www.npmjs.com/package/gulp-rev)
 - [gulp-rev-collector](https://www.npmjs.com/package/gulp-rev-collector)
 - [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
-- [gulp-watch](https://www.npmjs.com/package/gulp-watch)
 - [gulp-zip](https://www.npmjs.com/package/gulp-zip)
 - [merge-stream](https://www.npmjs.com/package/merge-stream) 将多个stream合成一个返回
-- [run-sequence](https://www.npmjs.com/package/run-sequence) 用于将任务按照一定的顺序执行
 - [yargs](https://www.npmjs.com/package/yargs) Node中处理命令行参数的通用解决方案
+
+## IDE（编辑器）
+
+推荐使用 [VS Code](https://code.visualstudio.com/) ，并安装以下扩展：
+
+- [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
+- [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)

@@ -1,0 +1,28 @@
+@import "compass";
+
+$example-layout: smart;
+@import "sprite/example/*.png";
+
+.chrome {
+    @include example-sprite(chrome);
+    width: example-sprite-width(chrome);
+    height: example-sprite-height(chrome);
+}
+.ie {
+    @include example-sprite(ie);
+    width: example-sprite-width(ie);
+    height: example-sprite-height(ie);
+}
+.firefox {
+    @include example-sprite(firefox);
+    width: example-sprite-width(firefox);
+    height: example-sprite-height(firefox);
+}
+
+nav {
+    text-align: center;
+    .active {
+        font-weight: bold;
+        text-decoration: none;
+    }
+}
