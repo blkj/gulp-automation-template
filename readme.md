@@ -27,7 +27,7 @@ $ gulp
 $ gulp [options]
 ```
 
-- `--local` ，用于切换本地/生成环境，默认为 `true` ，需要在代码里配置，具体可参考 `page/index.html`
+- `--local` ，用于切换本地/生成环境，默认为 `true` ，需要在代码里配置，具体可参考 `page/module/example/` 目录下演示文件
 - `--l` ，同 `--local`
 
 示例：
