@@ -17,45 +17,22 @@ $ gulp
 
 访问 `http://localhost:3000` 即可看到页面。
 
-## 参数
+## 指令
 
-### gulp
-
-运行指令
+### 运行指令
 
 ```
-$ gulp [options]
+gulp
 ```
 
-- `--local` ，用于切换本地/生成环境，默认为 `true` ，需要在代码里配置，具体可参考 `page/module/example/` 目录下演示文件
-- `--l` ，同 `--local`
-
-示例：
+### 发布指令
 
 ```
-gulp --l false
+gulp build
 ```
 
-### gulp build
-
-发布指令
-
-> 发布时使用了 gulp-tinypng-nokey 包进行图片压缩，需要将图片上传到服务器压缩后再下载，请确保打包时网络畅通
-
-```
-$ gulp build [options]
-```
-
-- `--local` ，切换至本地环境
-- `--l` ，同 `--local`
-- `--noimg` ，不处理图片
-- `--zip` ，创建压缩包，压缩包文件名为 package.json 里的 name 参数
-
-示例：
-
-```
-gulp build --noimg --zip
-```
+> tinypng 的压缩效果比 imagemin 更显著
+> 如果使用 tinypng 进行图片压缩，请确保打包时网络畅通
 
 ## 说明
 
@@ -76,7 +53,6 @@ gulp-automation
   │  ├─ sass              sass 源文件
   │  ├─ sourcejs          js 源文件
   │  └─ template          template 文件，存放 js 模版文件
-  ├─ config.rb            compass 配置文件
   ├─ gulpfile.js          gulp 配置文件
   └─ package.json         npm 配置文件
 ```
@@ -86,19 +62,22 @@ gulp-automation
 - [browser-sync](https://browsersync.io/) ([中文网](http://www.browsersync.cn/)) 浏览器同步测试工具
 - [del](https://www.npmjs.com/package/del) 用于删除文件
 - [gulp-clean-css](https://www.npmjs.com/package/gulp-clean-css)
-- [gulp-compass](https://www.npmjs.com/package/gulp-compass) 用于处理sass文件的工具
 - [gulp-file-include](https://www.npmjs.com/package/gulp-file-include) 用于引用公共模板
 - [gulp-htmlmin](https://www.npmjs.com/package/gulp-htmlmin)
+- [gulp-imagemin](https://www.npmjs.com/package/gulp-imagemin)
 - [gulp-tinypng-nokey](https://www.npmjs.com/package/gulp-tinypng-nokey)
 - [gulp-load-plugins](https://www.npmjs.com/package/gulp-load-plugins) 自动require在package.json中声明的依赖
 - [gulp-plumber](https://www.npmjs.com/package/gulp-plumber) 用于流的顺利进行
 - [gulp-preprocess](https://www.npmjs.com/package/gulp-preprocess)
 - [gulp-rev](https://www.npmjs.com/package/gulp-rev)
 - [gulp-rev-collector](https://www.npmjs.com/package/gulp-rev-collector)
+- [gulp-sass](https://www.npmjs.com/package/gulp-sass)
+- [gulp-sourcemaps](https://www.npmjs.com/package/gulp-sourcemaps)
 - [gulp-uglify](https://www.npmjs.com/package/gulp-uglify)
 - [gulp-zip](https://www.npmjs.com/package/gulp-zip)
+- [inquirer](https://www.npmjs.com/package/inquirer) 命令行交互工具
 - [merge-stream](https://www.npmjs.com/package/merge-stream) 将多个stream合成一个返回
-- [yargs](https://www.npmjs.com/package/yargs) Node中处理命令行参数的通用解决方案
+- [node-sass](https://www.npmjs.com/package/node-sass)
 
 ## IDE（编辑器）
 

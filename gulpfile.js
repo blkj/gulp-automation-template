@@ -1,81 +1,123 @@
 var gulp = require('gulp');
+var fs = require('fs');
 var del = require('del');
 var mergeStream = require('merge-stream');
 var browserSync = require('browser-sync').create();
 var $ = require('gulp-load-plugins')();
-var yargs = require('yargs');
-var args = yargs.argv;
+var inquirer = require('inquirer');
 var pkg = require('./package.json');
 
 var G = {
     path: '.',
-    page: [
-        './page/**/*.html',
-        '!./page/include/*.html'
-    ],
-    html: [
-        './*.html',
-        './module/**/*.html'
-    ],
+    page: ['./page/**/*.html', '!./page/include/*.html'],
+    html: ['./*.html', './module/**/*.html'],
     sass: './static/sass/*.scss',
     css: './static/**/*.css',
     sourcejs: './static/sourcejs/*.js',
-    js: [
-        './static/**/*.js',
-        '!./static/sourcejs/*.js'
-    ]
+    js: ['./static/**/*.js', '!./static/sourcejs/*.js']
 };
 
-var config = {
-    isLocal: true
-};
+var config = {};
+var answersData = {};
 
 // 默认任务
-gulp.task('default', gulp.series(
-    settings,
-    gulp.parallel(
-        compass,
-        js,
-        page
-    ),
-    server,
-    watchs
-));
+gulp.task(
+    'default',
+    gulp.series(inquire, gulp.parallel(sprites, sass, js, page), server, watchs)
+);
 
 // 发布&打包
-gulp.task('build', gulp.series(
-    ready,
-    settings,
-    delBuildFile,
-    gulp.parallel(
-        compass,
-        js,
-        page
-    ),
-    !args.noimg ? tinypngNokey : done => done(),
-    gulp.parallel(
-        gulp.series(compressCss, revCss),
-        gulp.series(compressJs, revJs)
-    ),
-    delRev,
-    htmlmin,
-    copyOtherFile,
-    args.z || args.zip ? zip : done => done()
-));
+gulp.task(
+    'build',
+    gulp.series(
+        inquireBuild,
+        delBuildFile,
+        gulp.parallel(sprites, sass, js, page),
+        gulp.parallel(
+            gulp.series(compressCss, revCss),
+            gulp.series(compressJs, revJs)
+        ),
+        delRev,
+        htmlmin,
+        copyOtherFile,
+        compressImage,
+        zip
+    )
+);
 
-function ready(done) {
-    config.isLocal = false;
-    done();
+function inquire(done) {
+    inquirer
+        .prompt([{
+            type: 'list',
+            message: '请选择运行环境：',
+            name: 'env',
+            choices: ['测试环境', '生产环境'],
+            filter: val => {
+                let env = {
+                    测试环境: 'development',
+                    生产环境: 'production'
+                };
+                return env[val];
+            }
+        }])
+        .then(answers => {
+            answersData = answers;
+            config.isLocal = answers.env == 'development' ? true : false;
+            done();
+        });
 }
 
-function settings(done) {
-    if (typeof args.l != 'undefined') {
-        config.isLocal = args.l;
-    }
-    if (typeof args.local != 'undefined') {
-        config.isLocal = args.local;
-    }
-    done();
+function inquireBuild(done) {
+    inquirer
+        .prompt([{
+                type: 'list',
+                message: '请选择打包环境：',
+                name: 'env',
+                choices: ['测试环境', '生产环境'],
+                default: '生产环境',
+                filter: val => {
+                    let env = {
+                        测试环境: 'development',
+                        生产环境: 'production'
+                    };
+                    return env[val];
+                }
+            },
+            {
+                type: 'confirm',
+                message: '是否压缩图片：',
+                name: 'compressImage'
+            },
+            {
+                type: 'list',
+                message: '请选择图片压缩方式：',
+                name: 'compressImageType',
+                choices: ['imagemin', 'tinypng'],
+                when: answers => {
+                    return answers.compressImage;
+                }
+            },
+            {
+                type: 'confirm',
+                message: '是否生成压缩包：',
+                name: 'zip',
+                default: false
+            },
+            {
+                type: 'input',
+                message: '请输入压缩包名称：',
+                name: 'zipName',
+                default: pkg.name,
+                when: answers => {
+                    return answers.zip;
+                }
+            }
+        ])
+        .then(answers => {
+            answersData = answers;
+            config.isLocal = answers.env == 'development' ? true : false;
+            done();
+        });
 }
 
 function server(done) {
@@ -85,46 +127,81 @@ function server(done) {
     done();
 }
 
-function compass() {
-    return gulp.src(G.sass)
-        // 使用 plumber 可以在纠正错误后继续执行任务
+function sprites() {
+    var arr = [];
+    var folder = [];
+    fs.readdirSync('static/image/sprite/').map(item => {
+        var stat = fs.statSync(`static/image/sprite/${item}`);
+        if (stat.isDirectory()) {
+            folder.push(item);
+        }
+    });
+    folder.map(item => {
+        arr.push(
+            gulp
+            .src(`static/image/sprite/${item}/*.png`)
+            .pipe($.plumber())
+            .pipe(
+                $.spritesmith({
+                    imgName: `${item}.png`,
+                    cssName: `_${item}.scss`,
+                    imgPath: `../image/sprite/${item}.png`,
+                    cssVarMap: function (sprite) {
+                        sprite.name = `${item}_${sprite.name}`;
+                    }
+                })
+            )
+            .pipe(gulp.dest('static/image/sprite/'))
+        );
+    });
+    return mergeStream(...arr);
+}
+
+function sass() {
+    return gulp
+        .src(G.sass)
         .pipe($.plumber())
-        .pipe($.compass({
-            config_file: './config.rb',
-            css: 'static/css',
-            sass: 'static/sass'
-        }));
+        .pipe($.sourcemaps.init())
+        .pipe($.sass())
+        .pipe($.sourcemaps.write('.'))
+        .pipe(gulp.dest('./static/css/'));
 }
 
 // css 文件变动后自动注入到页面，刷新样式
 function css() {
-    return gulp.src(G.css)
-        .pipe(browserSync.stream());
+    return gulp.src(G.css).pipe(browserSync.stream());
 }
 
 function js() {
-    return gulp.src(G.sourcejs)
+    return gulp
+        .src(G.sourcejs)
         .pipe($.plumber())
-        .pipe($.preprocess({
-            context: config
-        }))
+        .pipe(
+            $.preprocess({
+                context: config
+            })
+        )
         .pipe(gulp.dest('./static/js/'));
 }
 
 // 适配 page 中所有文件夹下的所有 html ，排除 page 下的 include 文件夹中 html
 function page() {
-    return gulp.src(G.page)
+    return gulp
+        .src(G.page)
         .pipe($.plumber())
-        .pipe($.preprocess({
-            context: config
-        }))
+        .pipe(
+            $.preprocess({
+                context: config
+            })
+        )
         .pipe($.fileInclude())
         .pipe(gulp.dest(G.path));
 }
 
 // 针对不同文件进行监听
 function watchs(done) {
-    gulp.watch(G.sass, gulp.series(compass));
+    gulp.watch('static/image/sprite/*/*.png', gulp.series(sprites));
+    gulp.watch(G.sass, gulp.series(sass));
     gulp.watch(G.css, gulp.series(css));
     gulp.watch(G.sourcejs, gulp.series(js));
     gulp.watch(G.js, function () {
@@ -140,15 +217,31 @@ function delBuildFile(done) {
     done();
 }
 
-function tinypngNokey() {
-    return gulp.src(['./static/image/**/*.{png,jpg,gif}', '!./static/image/sprite/*/*.{png,jpg,gif}'])
-        .pipe($.tinypngNokey())
-        .pipe(gulp.dest('./build/static/image'));
+function compressImage() {
+    var image = gulp.src([
+        './static/image/**/*.{png,jpg,gif}',
+        '!./static/image/sprite/*/*.{png,jpg,gif}'
+    ]);
+    if (answersData.compressImage) {
+        if (answersData.compressImageType == 'imagemin') {
+            image.pipe(
+                $.imagemin({
+                    progressive: true,
+                    optimizationLevel: 7
+                })
+            );
+        } else {
+            image.pipe($.tinypngNokey());
+        }
+        image.pipe(gulp.dest('./build/static/image'));
+    }
+    return image;
 }
 
 // 压缩 css 文件
 function compressCss() {
-    return gulp.src('./static/css/*.css')
+    return gulp
+        .src('./static/css/*.css')
         .pipe($.cleanCss())
         .pipe($.rev())
         .pipe(gulp.dest('./build/static/css'))
@@ -157,10 +250,12 @@ function compressCss() {
 }
 
 function revCss() {
-    var a = gulp.src(['./build/static/rev-css/*.json', './*.html'])
+    var a = gulp
+        .src(['./build/static/rev-css/*.json', './*.html'])
         .pipe($.revCollector())
         .pipe(gulp.dest('./build'));
-    var b = gulp.src(['./build/static/rev-css/*.json', './module/**/*.html'])
+    var b = gulp
+        .src(['./build/static/rev-css/*.json', './module/**/*.html'])
         .pipe($.revCollector())
         .pipe(gulp.dest('./build/module'));
     return mergeStream(a, b);
@@ -168,7 +263,8 @@ function revCss() {
 
 // 压缩 js 文件
 function compressJs() {
-    return gulp.src('./static/js/*.js')
+    return gulp
+        .src('./static/js/*.js')
         .pipe($.uglify())
         .pipe($.rev())
         .pipe(gulp.dest('./build/static/js'))
@@ -177,10 +273,12 @@ function compressJs() {
 }
 
 function revJs() {
-    var a = gulp.src(['./build/static/rev-js/*.json', './build/*.html'])
+    var a = gulp
+        .src(['./build/static/rev-js/*.json', './build/*.html'])
         .pipe($.revCollector())
         .pipe(gulp.dest('./build'));
-    var b = gulp.src(['./build/static/rev-js/*.json', './build/module/**/*.html'])
+    var b = gulp
+        .src(['./build/static/rev-js/*.json', './build/module/**/*.html'])
         .pipe($.revCollector())
         .pipe(gulp.dest('./build/module'));
     return mergeStream(a, b);
@@ -203,10 +301,12 @@ function htmlmin() {
         minifyJS: true, // 压缩页面JS
         minifyCSS: true // 压缩页面CSS
     };
-    var a = gulp.src('./build/*.html')
+    var a = gulp
+        .src('./build/*.html')
         .pipe($.htmlmin(option))
         .pipe(gulp.dest('./build'));
-    var b = gulp.src('./build/module/**/*.html')
+    var b = gulp
+        .src('./build/module/**/*.html')
         .pipe($.htmlmin(option))
         .pipe(gulp.dest('./build/module'));
     return mergeStream(a, b);
@@ -214,17 +314,23 @@ function htmlmin() {
 
 // 拷贝其它文件到 build 里
 function copyOtherFile() {
-    var plugins = gulp.src('./static/plugin/**/*')
+    var plugins = gulp
+        .src('./static/plugin/**/*')
         .pipe(gulp.dest('./build/static/plugin'));
-    var template = gulp.src('./static/template/*')
+    var template = gulp
+        .src('./static/template/*')
         .pipe(gulp.dest('./build/static/template'));
     return mergeStream(plugins, template);
 }
 
 function zip() {
-    return gulp.src('./build/**/*')
-        .pipe($.zip(pkg.name + '.' + getNowFormatDate() + '.zip'))
-        .pipe(gulp.dest('./build-zip'));
+    var zip = gulp.src('./build/**/*');
+    if (answersData.zip) {
+        zip
+            .pipe($.zip(answersData.zipName + '.' + getNowFormatDate() + '.zip'))
+            .pipe(gulp.dest('./build-zip'));
+    }
+    return zip;
 }
 
 // 获取当前时间
@@ -234,7 +340,9 @@ function getNowFormatDate() {
     month = month < 10 ? '0' + month : month;
     var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
     var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
-    var minute = date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
-    var second = date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
+    var minute =
+        date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+    var second =
+        date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
     return date.getFullYear() + month + strDate + '.' + hour + minute + second;
 }
