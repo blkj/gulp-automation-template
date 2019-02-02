@@ -25,11 +25,15 @@ $ gulp
 gulp
 ```
 
+![](https://i.loli.net/2019/02/02/5c55799b563ba.gif)
+
 ### 发布指令
 
 ```
 gulp build
 ```
+
+![](https://i.loli.net/2019/02/02/5c55799d3d10b.gif)
 
 > tinypng 的压缩效果比 imagemin 更显著
 > 如果使用 tinypng 进行图片压缩，请确保打包时网络畅通
