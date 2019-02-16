@@ -33,10 +33,8 @@ gulp.task(
         inquireBuild,
         delBuildFile,
         gulp.parallel(sprites, sass, js, page),
-        gulp.parallel(
-            gulp.series(compressCss, revCss),
-            gulp.series(compressJs, revJs)
-        ),
+        gulp.parallel(compressCss, compressJs),
+        revCssAndJs,
         delRev,
         htmlmin,
         copyOtherFile,
@@ -249,18 +247,6 @@ function compressCss() {
         .pipe(gulp.dest('./build/static/rev-css'));
 }
 
-function revCss() {
-    var a = gulp
-        .src(['./build/static/rev-css/*.json', './*.html'])
-        .pipe($.revCollector())
-        .pipe(gulp.dest('./build'));
-    var b = gulp
-        .src(['./build/static/rev-css/*.json', './module/**/*.html'])
-        .pipe($.revCollector())
-        .pipe(gulp.dest('./build/module'));
-    return mergeStream(a, b);
-}
-
 // 压缩 js 文件
 function compressJs() {
     return gulp
@@ -272,13 +258,13 @@ function compressJs() {
         .pipe(gulp.dest('./build/static/rev-js'));
 }
 
-function revJs() {
+function revCssAndJs() {
     var a = gulp
-        .src(['./build/static/rev-js/*.json', './build/*.html'])
+        .src(['./build/static/rev-css/*.json', './build/static/rev-js/*.json', './*.html'])
         .pipe($.revCollector())
         .pipe(gulp.dest('./build'));
     var b = gulp
-        .src(['./build/static/rev-js/*.json', './build/module/**/*.html'])
+        .src(['./build/static/rev-css/*.json', './build/static/rev-js/*.json', './module/**/*.html'])
         .pipe($.revCollector())
         .pipe(gulp.dest('./build/module'));
     return mergeStream(a, b);
