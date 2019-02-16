@@ -33,7 +33,7 @@ gulp.task(
         inquireBuild,
         delBuildFile,
         gulp.parallel(sprites, sass, js, page),
-        gulp.parallel(
+        gulp.series(
             gulp.series(compressCss, revCss),
             gulp.series(compressJs, revJs)
         ),
