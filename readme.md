@@ -89,3 +89,8 @@ gulp-automation
 
 - [EditorConfig for VS Code](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
 - [ESLint](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
+
+## 相关阅读
+
+- [Gulp 前端自动化工作流](https://hooray.github.io/posts/48995743/)
+- [gulp-automation 升级小记](https://hooray.github.io/posts/157bef6b/)
