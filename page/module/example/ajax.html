@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    @@include('../../include/example.head.html')
+</head>
+<body>
+    @@include('../../include/example.nav.html', {
+        "type": "ajax"
+    })
+    <button id="btn_ajax">获取电影列表</button>
+    <div id="movie"></div>
+    @@include('../../include/global.js.html')
+    <script>
+    $(function(){
+        $('#btn_ajax').click(function(){
+            $.ajax({
+                url: API.url() + 'movie/in_theaters',
+                dataType: 'jsonp',
+                data: {
+                    start: 0,
+                    count: 10
+                }
+            }).done(function(res){
+                $('#movie').html(API.template('example', res))
+            })
+        })
+    })
+    </script>
+</body>
+</html>

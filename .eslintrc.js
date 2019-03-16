@@ -42,7 +42,7 @@ module.exports = {
             'max': 1
         }],
         'quotes': [2, 'single'],
-        'semi': [2, 'always'],
+        'semi': [2, 'never'],
         'space-before-blocks': [2, 'always'],
         'space-before-function-paren': [2, 'never'],
         'space-in-parens': [2, 'never'],
