@@ -1,0 +1,18 @@
+{
+    "development": {
+        "name": "开发环境",
+        "data": {
+            "title": "开发",
+            "api": "https://api.douban.com/v2/",
+            "local": true
+        }
+    },
+    "production": {
+        "name": "生产环境",
+        "data": {
+            "title": "生产",
+            "api": "http://baidu.com/",
+            "local": false
+        }
+    }
+}

@@ -1,14 +1,9 @@
 var TEMPLATE_CACHE = {}
 var API = (function() {
-    // @if isLocal
-    var url = 'https://api.douban.com/v2/'
-    // @endif
-    // @if !isLocal
-    var url = 'http://baidu.com/'
-    // @endif
+    var url = '/* @echo api */'
     return {
         init: function() {
-            // @if isLocal
+            // @if local
             Cookies.set('token', '模拟token数据')
             // @endif
             $.ajaxSetup({

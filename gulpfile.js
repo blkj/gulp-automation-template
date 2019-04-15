@@ -6,6 +6,7 @@ var browserSync = require('browser-sync').create();
 var $ = require('gulp-load-plugins')();
 var inquirer = require('inquirer');
 var pkg = require('./package.json');
+var config = require('./config.json');
 
 var G = {
     path: '.',
@@ -17,7 +18,6 @@ var G = {
     js: ['./static/**/*.js', '!./static/sourcejs/*.js']
 };
 
-var config = {};
 var answersData = {};
 
 // 默认任务
@@ -44,41 +44,53 @@ gulp.task(
 );
 
 function inquire(done) {
+    var choices = []
+    for (var i in config) {
+        choices.push(config[i].name);
+    }
     inquirer
         .prompt([{
             type: 'list',
             message: '请选择运行环境：',
             name: 'env',
-            choices: ['测试环境', '生产环境'],
+            choices: choices,
             filter: val => {
-                let env = {
-                    测试环境: 'development',
-                    生产环境: 'production'
-                };
-                return env[val];
+                var key = '';
+                for (var i in config) {
+                    if (config[i].name == val) {
+                        key = i;
+                        break;
+                    }
+                }
+                return key;
             }
         }])
         .then(answers => {
             answersData = answers;
-            config.isLocal = answers.env == 'development' ? true : false;
             done();
         });
 }
 
 function inquireBuild(done) {
+    var choices = []
+    for (var i in config) {
+        choices.push(config[i].name);
+    }
     inquirer
         .prompt([{
                 type: 'list',
                 message: '请选择打包环境：',
                 name: 'env',
-                choices: ['测试环境', '生产环境'],
-                default: '生产环境',
+                choices: choices,
                 filter: val => {
-                    let env = {
-                        测试环境: 'development',
-                        生产环境: 'production'
-                    };
-                    return env[val];
+                    var key = '';
+                    for (var i in config) {
+                        if (config[i].name == val) {
+                            key = i;
+                            break;
+                        }
+                    }
+                    return key;
                 }
             },
             {
@@ -113,7 +125,6 @@ function inquireBuild(done) {
         ])
         .then(answers => {
             answersData = answers;
-            config.isLocal = answers.env == 'development' ? true : false;
             done();
         });
 }
@@ -176,7 +187,7 @@ function js() {
         .pipe($.plumber())
         .pipe(
             $.preprocess({
-                context: config
+                context: config[answersData.env].data
             })
         )
         .pipe(gulp.dest('./static/js/'));
@@ -189,7 +200,7 @@ function page() {
         .pipe($.plumber())
         .pipe(
             $.preprocess({
-                context: config
+                context: config[answersData.env].data
             })
         )
         .pipe($.fileInclude())
