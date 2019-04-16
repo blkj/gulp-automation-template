@@ -57,9 +57,29 @@ gulp-automation
   │  ├─ sass              sass 源文件
   │  ├─ sourcejs          js 源文件
   │  └─ template          template 文件，存放 js 模版文件
+  ├─ config.json          项目配置文件
   ├─ gulpfile.js          gulp 配置文件
   └─ package.json         npm 配置文件
 ```
+
+### 项目配置
+
+`config.json` 将业务代码里，会因为环境不同而变化的数据进行统一配置，常见的有网站标题、接口地址等。
+
+默认配置提供了两套环境，分别为开发环境和生产环境，可根据业务需求自行增加，例如增加测试环境。
+
+```json
+"development": {          // 名称，唯一
+    "name": "开发环境",    // 名称，用于图形化界面的展示
+    "data": {             // 需要用到的数据
+        "title": "开发",
+        "api": "https://api.douban.com/v2/",
+        "local": true
+    }
+}
+```
+
+> 该功能基于 [gulp-preprocess](https://www.npmjs.com/package/gulp-preprocess) 实现
 
 ### 功能模块
 
