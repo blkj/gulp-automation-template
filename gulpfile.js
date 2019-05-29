@@ -184,6 +184,7 @@ function css() {
 function js() {
     return gulp
         .src(G.sourcejs)
+        .pipe($.changed('./static/js/'))
         .pipe($.plumber())
         .pipe(
             $.preprocess({
@@ -213,9 +214,7 @@ function watchs(done) {
     gulp.watch(G.sass, gulp.series(sass));
     gulp.watch(G.css, gulp.series(css));
     gulp.watch(G.sourcejs, gulp.series(js));
-    gulp.watch(G.js, function () {
-        browserSync.reload();
-    });
+    gulp.watch(G.js).on('change', browserSync.reload);
     gulp.watch(G.page[0], gulp.series(page));
     gulp.watch(G.html).on('change', browserSync.reload);
     done();
