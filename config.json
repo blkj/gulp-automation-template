@@ -3,7 +3,7 @@
         "name": "开发环境",
         "data": {
             "title": "开发",
-            "api": "https://api.douban.com/v2/",
+            "api": "https://douban.uieee.com/v2/",
             "local": true
         }
     },

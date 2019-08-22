@@ -1,12 +1,12 @@
-var gulp = require('gulp');
-var fs = require('fs');
-var del = require('del');
-var mergeStream = require('merge-stream');
-var browserSync = require('browser-sync').create();
-var $ = require('gulp-load-plugins')();
-var inquirer = require('inquirer');
-var pkg = require('./package.json');
-var config = require('./config.json');
+var gulp = require('gulp')
+var fs = require('fs')
+var del = require('del')
+var mergeStream = require('merge-stream')
+var browserSync = require('browser-sync').create()
+var $ = require('gulp-load-plugins')()
+var inquirer = require('inquirer')
+var pkg = require('./package.json')
+var config = require('./config.json')
 
 var G = {
     path: '.',
@@ -16,15 +16,15 @@ var G = {
     css: './static/**/*.css',
     sourcejs: './static/sourcejs/*.js',
     js: ['./static/**/*.js', '!./static/sourcejs/*.js']
-};
+}
 
-var answersData = {};
+var answersData = {}
 
 // 默认任务
 gulp.task(
     'default',
     gulp.series(inquire, gulp.parallel(sprites, sass, js, page), server, watchs)
-);
+)
 
 // 发布&打包
 gulp.task(
@@ -41,56 +41,59 @@ gulp.task(
         compressImage,
         zip
     )
-);
+)
 
 function inquire(done) {
     var choices = []
     for (var i in config) {
-        choices.push(config[i].name);
+        choices.push(config[i].name)
     }
     inquirer
-        .prompt([{
-            type: 'list',
-            message: '请选择运行环境：',
-            name: 'env',
-            choices: choices,
-            filter: val => {
-                var key = '';
-                for (var i in config) {
-                    if (config[i].name == val) {
-                        key = i;
-                        break;
+        .prompt([
+            {
+                type: 'list',
+                message: '请选择运行环境：',
+                name: 'env',
+                choices: choices,
+                filter: val => {
+                    var key = ''
+                    for (var i in config) {
+                        if (config[i].name == val) {
+                            key = i
+                            break
+                        }
                     }
+                    return key
                 }
-                return key;
             }
-        }])
+        ])
         .then(answers => {
-            answersData = answers;
-            done();
-        });
+            answersData = answers
+            done()
+        })
 }
 
 function inquireBuild(done) {
     var choices = []
     for (var i in config) {
-        choices.push(config[i].name);
+        choices.push(config[i].name)
     }
     inquirer
-        .prompt([{
+        .prompt([
+            {
                 type: 'list',
                 message: '请选择打包环境：',
                 name: 'env',
                 choices: choices,
                 filter: val => {
-                    var key = '';
+                    var key = ''
                     for (var i in config) {
                         if (config[i].name == val) {
-                            key = i;
-                            break;
+                            key = i
+                            break
                         }
                     }
-                    return key;
+                    return key
                 }
             },
             {
@@ -104,7 +107,7 @@ function inquireBuild(done) {
                 name: 'compressImageType',
                 choices: ['imagemin', 'tinypng'],
                 when: answers => {
-                    return answers.compressImage;
+                    return answers.compressImage
                 }
             },
             {
@@ -119,51 +122,51 @@ function inquireBuild(done) {
                 name: 'zipName',
                 default: pkg.name,
                 when: answers => {
-                    return answers.zip;
+                    return answers.zip
                 }
             }
         ])
         .then(answers => {
-            answersData = answers;
-            done();
-        });
+            answersData = answers
+            done()
+        })
 }
 
 function server(done) {
     browserSync.init({
         server: G.path
-    });
-    done();
+    })
+    done()
 }
 
 function sprites() {
-    var arr = [];
-    var folder = [];
+    var arr = []
+    var folder = []
     fs.readdirSync('static/image/sprite/').map(item => {
-        var stat = fs.statSync(`static/image/sprite/${item}`);
+        var stat = fs.statSync(`static/image/sprite/${item}`)
         if (stat.isDirectory()) {
-            folder.push(item);
+            folder.push(item)
         }
-    });
+    })
     folder.map(item => {
         arr.push(
             gulp
-            .src(`static/image/sprite/${item}/*.png`)
-            .pipe($.plumber())
-            .pipe(
-                $.spritesmith({
-                    imgName: `${item}.png`,
-                    cssName: `_${item}.scss`,
-                    imgPath: `../image/sprite/${item}.png`,
-                    cssVarMap: function (sprite) {
-                        sprite.name = `${item}_${sprite.name}`;
-                    }
-                })
-            )
-            .pipe(gulp.dest('static/image/sprite/'))
-        );
-    });
-    return mergeStream(...arr);
+                .src(`static/image/sprite/${item}/*.png`)
+                .pipe($.plumber())
+                .pipe(
+                    $.spritesmith({
+                        imgName: `${item}.png`,
+                        cssName: `_${item}.scss`,
+                        imgPath: `../image/sprite/${item}.png`,
+                        cssVarMap: function(sprite) {
+                            sprite.name = `${item}_${sprite.name}`
+                        }
+                    })
+                )
+                .pipe(gulp.dest('static/image/sprite/'))
+        )
+    })
+    return mergeStream(...arr)
 }
 
 function sass() {
@@ -173,12 +176,12 @@ function sass() {
         .pipe($.sourcemaps.init())
         .pipe($.sass())
         .pipe($.sourcemaps.write('.'))
-        .pipe(gulp.dest('./static/css/'));
+        .pipe(gulp.dest('./static/css/'))
 }
 
 // css 文件变动后自动注入到页面，刷新样式
 function css() {
-    return gulp.src(G.css).pipe(browserSync.stream());
+    return gulp.src(G.css).pipe(browserSync.stream())
 }
 
 function js() {
@@ -191,7 +194,7 @@ function js() {
                 context: config[answersData.env].data
             })
         )
-        .pipe(gulp.dest('./static/js/'));
+        .pipe(gulp.dest('./static/js/'))
 }
 
 // 适配 page 中所有文件夹下的所有 html ，排除 page 下的 include 文件夹中 html
@@ -205,31 +208,31 @@ function page() {
             })
         )
         .pipe($.fileInclude())
-        .pipe(gulp.dest(G.path));
+        .pipe(gulp.dest(G.path))
 }
 
 // 针对不同文件进行监听
 function watchs(done) {
-    gulp.watch('static/image/sprite/*/*.png', gulp.series(sprites));
-    gulp.watch(G.sass, gulp.series(sass));
-    gulp.watch(G.css, gulp.series(css));
-    gulp.watch(G.sourcejs, gulp.series(js));
-    gulp.watch(G.js).on('change', browserSync.reload);
-    gulp.watch(G.page[0], gulp.series(page));
-    gulp.watch(G.html).on('change', browserSync.reload);
-    done();
+    gulp.watch('static/image/sprite/*/*.png', gulp.series(sprites))
+    gulp.watch(G.sass, gulp.series(sass))
+    gulp.watch(G.css, gulp.series(css))
+    gulp.watch(G.sourcejs, gulp.series(js))
+    gulp.watch(G.js).on('change', browserSync.reload)
+    gulp.watch(G.page[0], gulp.series(page))
+    gulp.watch(G.html).on('change', browserSync.reload)
+    done()
 }
 
 function delBuildFile(done) {
-    del.sync(['build/**']);
-    done();
+    del.sync(['build/**'])
+    done()
 }
 
 function compressImage() {
     var image = gulp.src([
         './static/image/**/*.{png,jpg,gif}',
         '!./static/image/sprite/*/*.{png,jpg,gif}'
-    ]);
+    ])
     if (answersData.compressImage) {
         if (answersData.compressImageType == 'imagemin') {
             image.pipe(
@@ -237,13 +240,13 @@ function compressImage() {
                     progressive: true,
                     optimizationLevel: 7
                 })
-            );
+            )
         } else {
-            image.pipe($.tinypngNokey());
+            image.pipe($.tinypngNokey())
         }
-        image.pipe(gulp.dest('./build/static/image'));
+        image.pipe(gulp.dest('./build/static/image'))
     }
-    return image;
+    return image
 }
 
 // 压缩 css 文件
@@ -254,7 +257,7 @@ function compressCss() {
         .pipe($.rev())
         .pipe(gulp.dest('./build/static/css'))
         .pipe($.rev.manifest())
-        .pipe(gulp.dest('./build/static/rev-css'));
+        .pipe(gulp.dest('./build/static/rev-css'))
 }
 
 // 压缩 js 文件
@@ -265,24 +268,32 @@ function compressJs() {
         .pipe($.rev())
         .pipe(gulp.dest('./build/static/js'))
         .pipe($.rev.manifest())
-        .pipe(gulp.dest('./build/static/rev-js'));
+        .pipe(gulp.dest('./build/static/rev-js'))
 }
 
 function revCssAndJs() {
     var a = gulp
-        .src(['./build/static/rev-css/*.json', './build/static/rev-js/*.json', './*.html'])
+        .src([
+            './build/static/rev-css/*.json',
+            './build/static/rev-js/*.json',
+            './*.html'
+        ])
         .pipe($.revCollector())
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build'))
     var b = gulp
-        .src(['./build/static/rev-css/*.json', './build/static/rev-js/*.json', './module/**/*.html'])
+        .src([
+            './build/static/rev-css/*.json',
+            './build/static/rev-js/*.json',
+            './module/**/*.html'
+        ])
         .pipe($.revCollector())
-        .pipe(gulp.dest('./build/module'));
-    return mergeStream(a, b);
+        .pipe(gulp.dest('./build/module'))
+    return mergeStream(a, b)
 }
 
 function delRev(done) {
-    del.sync(['./build/static/rev-css', './build/static/rev-js']);
-    done();
+    del.sync(['./build/static/rev-css', './build/static/rev-js'])
+    done()
 }
 
 // 压缩 html 文件
@@ -296,49 +307,49 @@ function htmlmin() {
         removeStyleLinkTypeAttributes: true, // 删除<style>和<link>的type="text/css"
         minifyJS: true, // 压缩页面JS
         minifyCSS: true // 压缩页面CSS
-    };
+    }
     var a = gulp
         .src('./build/*.html')
         .pipe($.htmlmin(option))
-        .pipe(gulp.dest('./build'));
+        .pipe(gulp.dest('./build'))
     var b = gulp
         .src('./build/module/**/*.html')
         .pipe($.htmlmin(option))
-        .pipe(gulp.dest('./build/module'));
-    return mergeStream(a, b);
+        .pipe(gulp.dest('./build/module'))
+    return mergeStream(a, b)
 }
 
 // 拷贝其它文件到 build 里
 function copyOtherFile() {
     var plugins = gulp
         .src('./static/plugin/**/*')
-        .pipe(gulp.dest('./build/static/plugin'));
+        .pipe(gulp.dest('./build/static/plugin'))
     var template = gulp
         .src('./static/template/*')
-        .pipe(gulp.dest('./build/static/template'));
-    return mergeStream(plugins, template);
+        .pipe(gulp.dest('./build/static/template'))
+    return mergeStream(plugins, template)
 }
 
 function zip() {
-    var zip = gulp.src('./build/**/*');
+    var zip = gulp.src('./build/**/*')
     if (answersData.zip) {
-        zip
-            .pipe($.zip(answersData.zipName + '.' + getNowFormatDate() + '.zip'))
-            .pipe(gulp.dest('./build-zip'));
+        zip.pipe(
+            $.zip(answersData.zipName + '.' + getNowFormatDate() + '.zip')
+        ).pipe(gulp.dest('./build-zip'))
     }
-    return zip;
+    return zip
 }
 
 // 获取当前时间
 function getNowFormatDate() {
-    var date = new Date();
-    var month = date.getMonth() + 1;
-    month = month < 10 ? '0' + month : month;
-    var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
-    var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours();
+    var date = new Date()
+    var month = date.getMonth() + 1
+    month = month < 10 ? '0' + month : month
+    var strDate = date.getDate() < 10 ? '0' + date.getDate() : date.getDate()
+    var hour = date.getHours() < 10 ? '0' + date.getHours() : date.getHours()
     var minute =
-        date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes();
+        date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes()
     var second =
-        date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds();
-    return date.getFullYear() + month + strDate + '.' + hour + minute + second;
+        date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds()
+    return date.getFullYear() + month + strDate + '.' + hour + minute + second
 }
