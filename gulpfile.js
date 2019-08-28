@@ -158,9 +158,8 @@ function sprites() {
                         imgName: `${item}.png`,
                         cssName: `_${item}.scss`,
                         imgPath: `../image/sprite/${item}.png`,
-                        cssVarMap: function(sprite) {
-                            sprite.name = `${item}_${sprite.name}`
-                        }
+                        cssTemplate: 'scss.template.handlebars',
+                        cssSpritesheetName: `${item}`
                     })
                 )
                 .pipe(gulp.dest('static/image/sprite/'))

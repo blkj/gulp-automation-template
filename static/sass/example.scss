@@ -2,13 +2,13 @@
 @import '../image/sprite/_example';
 
 .chrome {
-    @include sprite($example-chrome);
+    @include example-sprite(chrome);
 }
 .ie {
-    @include sprite($example-ie);
+    @include example-sprite(ie);
 }
 .firefox {
-    @include sprite($example-firefox);
+    @include example-sprite(firefox);
 }
 
 nav {
