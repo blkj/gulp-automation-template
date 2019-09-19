@@ -54,10 +54,10 @@ ${{spritesheet_info.strings.name}}-sprites: (
 {{#block "spritesheet-functions"}}
 {{#if options.functions}}
 @mixin all-{{spritesheet_info.strings.name}}-sprites() {
-    @each $sprite in ${{spritesheet_info.strings.name}}-sprites {
-        $sprite-name: nth($sprite, 10);
-        .{{spritesheet_info.strings.name}}-#{$sprite-name}-sprite {
-            @include {{spritesheet_info.strings.name}}-sprite($sprite);
+    @each $key, $val in ${{spritesheet_info.strings.name}}-sprites {
+        $sprite-name: nth($val, 10);
+        .{{spritesheet_info.strings.name}}-#{$sprite-name} {
+            @include {{spritesheet_info.strings.name}}-sprite($key);
         }
     }
 }
