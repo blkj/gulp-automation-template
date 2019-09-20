@@ -12,7 +12,7 @@ var G = {
     path: '.',
     page: ['./page/**/*.html', '!./page/include/*.html'],
     html: ['./*.html', './module/**/*.html'],
-    sass: './static/sass/*.scss',
+    sass: './static/sass/**/*.scss',
     css: './static/**/*.css',
     sourcejs: './static/sourcejs/*.js',
     js: ['./static/**/*.js', '!./static/sourcejs/*.js']
