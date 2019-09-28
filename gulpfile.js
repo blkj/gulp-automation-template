@@ -14,7 +14,7 @@ var G = {
     html: ['./*.html', './module/**/*.html'],
     sass: './static/sass/**/*.scss',
     css: './static/**/*.css',
-    sourcejs: './static/sourcejs/*.js',
+    sourcejs: './static/sourcejs/**/*.js',
     js: ['./static/**/*.js', '!./static/sourcejs/*.js']
 }
 
@@ -251,7 +251,7 @@ function compressImage() {
 // 压缩 css 文件
 function compressCss() {
     return gulp
-        .src('./static/css/*.css')
+        .src('./static/css/**/*.css')
         .pipe($.cleanCss())
         .pipe($.rev())
         .pipe(gulp.dest('./build/static/css'))
@@ -262,7 +262,7 @@ function compressCss() {
 // 压缩 js 文件
 function compressJs() {
     return gulp
-        .src('./static/js/*.js')
+        .src('./static/js/**/*.js')
         .pipe($.uglify())
         .pipe($.rev())
         .pipe(gulp.dest('./build/static/js'))
