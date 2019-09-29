@@ -8,6 +8,7 @@
 
 # 编译的精灵图
 /static/image/sprite/*.*
+!/static/image/sprite/.gitkeep
 
 # 编译的 css 文件
 /static/css/
