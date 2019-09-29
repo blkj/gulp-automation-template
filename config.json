@@ -3,7 +3,7 @@
         "name": "开发环境",
         "data": {
             "title": "开发",
-            "api": "https://douban.uieee.com/v2/",
+            "api": "",
             "local": true
         }
     },
@@ -11,7 +11,7 @@
         "name": "生产环境",
         "data": {
             "title": "生产",
-            "api": "http://baidu.com/",
+            "api": "",
             "local": false
         }
     }
