@@ -8,10 +8,22 @@
 
 > 本项目基于 Gulp 4.x 运行，如果你以前全局安装过 gulp ，需要先运行 `npm rm --global gulp` 删除旧版本 gulp ，再运行 `npm install --global gulp-cli` 安装最新版本。
 
-下载到本地后运行：
+### 方法1
+
+下载到本地后，修改 `package.json` 文件里的 `name` 参数为项目名，然后依次运行：
 
 ```
-$ npm install
+npm install
+gulp
+```
+
+访问 `http://localhost:3000` 即可看到页面。
+
+### 方法2
+
+使用易网项目手脚架 [1one-project](https://www.npmjs.com/package/1one-project) 进行项目初始化，随后运行：
+
+```
 $ gulp
 ```
 
