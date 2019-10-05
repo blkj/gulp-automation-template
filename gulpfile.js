@@ -139,7 +139,7 @@ function server(done) {
     done()
 }
 
-function sprites() {
+function sprites(done) {
     var arr = []
     var folder = []
     fs.readdirSync('static/image/sprite/').map(item => {
@@ -148,24 +148,28 @@ function sprites() {
             folder.push(item)
         }
     })
-    folder.map(item => {
-        arr.push(
-            gulp
-                .src(`static/image/sprite/${item}/*.png`)
-                .pipe($.plumber())
-                .pipe(
-                    $.spritesmith({
-                        imgName: `${item}.png`,
-                        cssName: `_${item}.scss`,
-                        imgPath: `../image/sprite/${item}.png`,
-                        cssTemplate: 'scss.template.handlebars',
-                        cssSpritesheetName: `${item}`
-                    })
-                )
-                .pipe(gulp.dest('static/image/sprite/'))
-        )
-    })
-    return mergeStream(...arr)
+    if (folder.length) {
+        folder.map(item => {
+            arr.push(
+                gulp
+                    .src(`static/image/sprite/${item}/*.png`)
+                    .pipe($.plumber())
+                    .pipe(
+                        $.spritesmith({
+                            imgName: `${item}.png`,
+                            cssName: `_${item}.scss`,
+                            imgPath: `../image/sprite/${item}.png`,
+                            cssTemplate: 'scss.template.handlebars',
+                            cssSpritesheetName: `${item}`
+                        })
+                    )
+                    .pipe(gulp.dest('static/image/sprite/'))
+            )
+        })
+        return mergeStream(...arr)
+    } else {
+        done()
+    }
 }
 
 function sass() {
