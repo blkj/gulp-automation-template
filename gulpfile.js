@@ -190,7 +190,6 @@ function css() {
 function js() {
     return gulp
         .src(G.sourcejs)
-        .pipe($.changed('./static/js/'))
         .pipe($.plumber())
         .pipe(
             $.preprocess({
