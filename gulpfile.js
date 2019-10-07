@@ -204,12 +204,12 @@ function page() {
     return gulp
         .src(G.page)
         .pipe($.plumber())
+        .pipe($.fileInclude())
         .pipe(
             $.preprocess({
                 context: config[answersData.env].data
             })
         )
-        .pipe($.fileInclude())
         .pipe(gulp.dest(G.path))
 }
 
