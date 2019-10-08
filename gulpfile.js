@@ -23,7 +23,7 @@ var answersData = {}
 // 默认任务
 gulp.task(
     'default',
-    gulp.series(inquire, gulp.parallel(sprites, sass, js, page), server, watchs)
+    gulp.series(inquire, delOldFile, gulp.parallel(sprites, sass, js, page), server, watchs)
 )
 
 // 发布&打包
@@ -222,6 +222,11 @@ function watchs(done) {
     gulp.watch(G.js).on('change', browserSync.reload)
     gulp.watch(G.page[0], gulp.series(page))
     gulp.watch(G.html).on('change', browserSync.reload)
+    done()
+}
+
+function delOldFile(done) {
+    del.sync(['*.html', 'module/', 'static/css/', 'static/js/'])
     done()
 }
 
