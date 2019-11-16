@@ -12,12 +12,12 @@
     "babel-eslint": "^10.0.3",
     "browser-sync": "^2.26.7",
     "del": "^5.1.0",
-    "eslint": "^6.4.0",
+    "eslint": "^6.6.0",
     "gulp": "^4.0.2",
     "gulp-clean-css": "^4.2.0",
-    "gulp-file-include": "^2.0.1",
+    "gulp-file-include": "^2.1.1",
     "gulp-htmlmin": "^5.0.1",
-    "gulp-imagemin": "^6.0.0",
+    "gulp-imagemin": "^6.2.0",
     "gulp-load-plugins": "^2.0.1",
     "gulp-plumber": "^1.2.1",
     "gulp-preprocess": "^3.0.3",
@@ -27,10 +27,10 @@
     "gulp-sourcemaps": "^2.6.5",
     "gulp-tinypng-nokey": "^1.1.0",
     "gulp-uglify": "^3.0.2",
-    "gulp-zip": "^5.0.0",
+    "gulp-zip": "^5.0.1",
     "gulp.spritesmith": "^6.11.0",
     "inquirer": "^7.0.0",
     "merge-stream": "^2.0.0",
-    "node-sass": "^4.11.0"
+    "node-sass": "^4.13.0"
   }
 }

@@ -23,7 +23,7 @@ var answersData = {}
 // 默认任务
 gulp.task(
     'default',
-    gulp.series(inquire, delOldFile, gulp.parallel(sprites, sass, js, page), server, watchs)
+    gulp.series(inquire, delOldFile, sprites, gulp.parallel(sass, js, page), server, watchs)
 )
 
 // 发布&打包
@@ -32,7 +32,8 @@ gulp.task(
     gulp.series(
         inquireBuild,
         delBuildFile,
-        gulp.parallel(sprites, sass, js, page),
+        sprites,
+        gulp.parallel(sass, js, page),
         gulp.parallel(compressCss, compressJs),
         revCssAndJs,
         delRev,
@@ -251,8 +252,8 @@ function compressImage() {
         } else {
             image.pipe($.tinypngNokey())
         }
-        image.pipe(gulp.dest('./build/static/image'))
     }
+    image.pipe(gulp.dest('./build/static/image'))
     return image
 }
 
